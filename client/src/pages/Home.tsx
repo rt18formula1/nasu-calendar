@@ -142,59 +142,59 @@ export default function Home() {
               <Card className="border-slate-200 p-6 rounded-xl">
                 <ul className="space-y-3">
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午前9:45</span>
+                    <span className="text-slate-600">日 午前9:45</span>
                     <span className="font-medium text-slate-900">ゆるコンピュータ科学ラジオ</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後8時</span>
+                    <span className="text-slate-600">日 午後8時</span>
                     <span className="font-medium text-slate-900">ゆる民俗学ラジオ</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後4時</span>
+                    <span className="text-slate-600">月 午後4時</span>
                     <span className="font-medium text-slate-900">博士と道化師</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後5時</span>
+                    <span className="text-slate-600">月 午後5時</span>
                     <span className="font-medium text-slate-900">積読チャンネル</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後6:45</span>
+                    <span className="text-slate-600">火 午後6:45</span>
                     <span className="font-medium text-slate-900">ゆる言語学ラジオ</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後8時</span>
+                    <span className="text-slate-600">火 午後8時</span>
                     <span className="font-medium text-slate-900">煩悩どこまでも</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後6:45</span>
+                    <span className="text-slate-600">水 午後6:45</span>
                     <span className="font-medium text-slate-900">ゆる学徒カフェ</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後8時</span>
+                    <span className="text-slate-600">水 午後8時</span>
                     <span className="font-medium text-slate-900">白黒つけない会議</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後6時</span>
+                    <span className="text-slate-600">木 午後6時</span>
                     <span className="font-medium text-slate-900">歌舞伎町にかぶりつけ!【かぶかぶ】</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後8時</span>
+                    <span className="text-slate-600">木 午後8時</span>
                     <span className="font-medium text-slate-900">ゆる天文学ラジオ</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後7時</span>
+                    <span className="text-slate-600">金 午後7時</span>
                     <span className="font-medium text-slate-900">株式会社pedantic</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後8時</span>
+                    <span className="text-slate-600">金 午後8時</span>
                     <span className="font-medium text-slate-900">ゆる音楽学ラジオ</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午前9:45</span>
+                    <span className="text-slate-600">土 午前9:45</span>
                     <span className="font-medium text-slate-900">白黒つけない会議</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">午後8時</span>
+                    <span className="text-slate-600">土 午後8時</span>
                     <span className="font-medium text-slate-900">ゆる哲学ラジオ</span>
                   </li>
                 </ul>
