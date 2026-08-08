@@ -98,7 +98,7 @@ export default function Home() {
                 <img
                   src="/無題 - 2026年8月08日 14.10.24.png"
                   alt="About pedantic calendar"
-                  className="w-full h-auto object-cover"
+                  className="w-full h-auto max-h-[300px] object-contain"
                 />
               </div>
             </div>
