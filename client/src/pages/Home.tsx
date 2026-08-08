@@ -79,7 +79,7 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl">
           <div className="text-center">
             <h2 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
-              動画公開カレンダー
+              ゆる学徒公開カレンダー
             </h2>
             <p className="mb-8 text-lg text-slate-600">
               ※非公式 ゆる学徒界隈のラジオの動画公開スケジュールのカレンダーです。
