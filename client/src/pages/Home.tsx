@@ -136,8 +136,80 @@ export default function Home() {
               </p>
             </div>
 
+            {/* Schedule List */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-slate-900">スケジュール</h3>
+              <Card className="border-slate-200 p-6 rounded-xl">
+                <ul className="space-y-3">
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午前9:45</span>
+                    <span className="font-medium text-slate-900">ゆるコンピュータ科学ラジオ</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後8時</span>
+                    <span className="font-medium text-slate-900">ゆる民俗学ラジオ</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後4時</span>
+                    <span className="font-medium text-slate-900">博士と道化師</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後5時</span>
+                    <span className="font-medium text-slate-900">積読チャンネル</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後6:45</span>
+                    <span className="font-medium text-slate-900">ゆる言語学ラジオ</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後8時</span>
+                    <span className="font-medium text-slate-900">煩悩どこまでも</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後6:45</span>
+                    <span className="font-medium text-slate-900">ゆる学徒カフェ</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後8時</span>
+                    <span className="font-medium text-slate-900">白黒つけない会議</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後6時</span>
+                    <span className="font-medium text-slate-900">歌舞伎町にかぶりつけ!【かぶかぶ】</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後8時</span>
+                    <span className="font-medium text-slate-900">ゆる天文学ラジオ</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後7時</span>
+                    <span className="font-medium text-slate-900">株式会社pedantic</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後8時</span>
+                    <span className="font-medium text-slate-900">ゆる音楽学ラジオ</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午前9:45</span>
+                    <span className="font-medium text-slate-900">白黒つけない会議</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">午後8時</span>
+                    <span className="font-medium text-slate-900">ゆる哲学ラジオ</span>
+                  </li>
+                </ul>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Distribution Section */}
+      <section id="distribute" className="px-4 py-12">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid gap-8 lg:grid-cols-3">
             {/* Distribution Options */}
-            <div id="distribute" className="space-y-4">
+            <div className="lg:col-span-2 space-y-4">
               <h3 className="text-lg font-semibold text-slate-900">配布方法</h3>
 
               {/* Subscribe Card */}
