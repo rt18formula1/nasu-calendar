@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Calendar, Clock, Copy, ExternalLink } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Calendar, Copy, ExternalLink, Menu, X } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 /**
@@ -17,113 +17,10 @@ import { toast } from "sonner";
 const CALENDAR_ID = "5b1c2487b8256ac0966f9699231da20ef9cc6d72d62a77f439b1e8e0e828ce46@group.calendar.google.com";
 const CALENDAR_EMBED_URL = `https://calendar.google.com/calendar/embed?src=${CALENDAR_ID}&ctz=Asia%2FTokyo`;
 const CALENDAR_SUBSCRIBE_URL = `https://calendar.google.com/calendar/u/0?cid=${CALENDAR_ID}`;
-const ICS_URL = `https://calendar.google.com/calendar/ical/${CALENDAR_ID}/public/basic.ics`;
-
-interface CalendarEvent {
-  title: string;
-  startTime: Date;
-  endTime: Date;
-  description?: string;
-}
-
-function isToday(date: Date): boolean {
-  const today = new Date();
-  return date.getDate() === today.getDate() &&
-         date.getMonth() === today.getMonth() &&
-         date.getFullYear() === today.getFullYear();
-}
-
-function parseICS(icsData: string): CalendarEvent[] {
-  const events: CalendarEvent[] = [];
-  const lines = icsData.split('\n');
-  let currentEvent: Partial<CalendarEvent> | null = null;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (line.startsWith('BEGIN:VEVENT')) {
-      currentEvent = {};
-    } else if (line.startsWith('END:VEVENT') && currentEvent) {
-      if (currentEvent.title && currentEvent.startTime) {
-        events.push(currentEvent as CalendarEvent);
-      }
-      currentEvent = null;
-    } else if (line.startsWith('SUMMARY:') && currentEvent) {
-      currentEvent.title = line.substring(8).replace(/\\,/g, ',').replace(/\\;/g, ';');
-    } else if (line.startsWith('DTSTART') && currentEvent) {
-      const dateStr = line.split(':')[1] || line.substring(8);
-      // Parse ICS date format: 20260808T200000Z or 20260808
-      currentEvent.startTime = parseICSDate(dateStr);
-    } else if (line.startsWith('DTEND') && currentEvent) {
-      const dateStr = line.split(':')[1] || line.substring(6);
-      currentEvent.endTime = parseICSDate(dateStr);
-    } else if (line.startsWith('DESCRIPTION:') && currentEvent) {
-      currentEvent.description = line.substring(12).replace(/\\,/g, ',').replace(/\\;/g, ';');
-    }
-  }
-
-  return events;
-}
-
-function parseICSDate(dateStr: string): Date {
-  // Handle ICS date formats: 
-  // - 20260808T200000Z (UTC)
-  // - 20260808T200000 (local)
-  // - 20260808 (date only)
-  
-  let year = 0, month = 0, day = 0, hours = 0, minutes = 0;
-  
-  if (dateStr.length >= 8) {
-    year = parseInt(dateStr.substring(0, 4));
-    month = parseInt(dateStr.substring(4, 6)) - 1; // JS months are 0-indexed
-    day = parseInt(dateStr.substring(6, 8));
-  }
-  
-  if (dateStr.length >= 15 && dateStr.includes('T')) {
-    hours = parseInt(dateStr.substring(9, 11));
-    minutes = parseInt(dateStr.substring(11, 13));
-  }
-  
-  const date = new Date(year, month, day, hours, minutes);
-  
-  // If the date string ends with 'Z', it's UTC - convert to local time
-  if (dateStr.endsWith('Z')) {
-    return new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
-  }
-  
-  return date;
-}
-
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
-}
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'long' });
-}
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
-  const [todayEvents, setTodayEvents] = useState<CalendarEvent[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTodayEvents = async () => {
-      try {
-        const response = await fetch(ICS_URL);
-        const icsData = await response.text();
-        const allEvents = parseICS(icsData);
-        const eventsToday = allEvents.filter(event => isToday(event.startTime));
-        setTodayEvents(eventsToday);
-      } catch (error) {
-        console.error('Failed to fetch calendar events:', error);
-        setTodayEvents([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTodayEvents();
-  }, []);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleCopyCalendarId = () => {
     navigator.clipboard.writeText(CALENDAR_ID);
@@ -148,7 +45,32 @@ export default function Home() {
               配布方法
             </a>
           </nav>
+          <button
+            className="md:hidden p-2 text-slate-600 hover:text-slate-900"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <nav className="md:hidden border-t border-slate-200 bg-white px-4 py-4">
+            <a
+              href="#calendar"
+              className="block py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              カレンダー
+            </a>
+            <a
+              href="#distribute"
+              className="block py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              配布方法
+            </a>
+          </nav>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -167,43 +89,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Today's Schedule Section */}
-      <section className="px-4 py-8 bg-gradient-to-b from-slate-50 to-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="mb-6">
-            <h3 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Clock className="h-6 w-6 text-[#E8956F]" />
-              今日公開！
-            </h3>
-            <p className="text-slate-600 mt-1">{formatDate(new Date())}</p>
-          </div>
-          
-          {loading ? (
-            <div className="text-center py-8 text-slate-500">
-              読み込み中...
-            </div>
-          ) : todayEvents.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {todayEvents.map((event, index) => (
-                <Card key={index} className="border-slate-200 p-5 hover:shadow-lg transition-all hover:border-[#E8956F]/30 rounded-xl">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[#E8956F]">
-                    <Clock className="h-4 w-4" />
-                    {formatTime(event.startTime)} - {formatTime(event.endTime)}
-                  </div>
-                  <h4 className="font-semibold text-slate-900 mb-2">{event.title}</h4>
-                  {event.description && (
-                    <p className="text-sm text-slate-600 line-clamp-2">{event.description}</p>
-                  )}
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <Card className="border-slate-200 p-8 text-center rounded-xl">
-              <p className="text-slate-500">今日の予定はありません</p>
-            </Card>
-          )}
-        </div>
-      </section>
 
       {/* Main Content */}
       <section id="calendar" className="px-4 py-12">
@@ -216,7 +101,8 @@ export default function Home() {
                   src={CALENDAR_EMBED_URL}
                   style={{ border: 0 }}
                   width="100%"
-                  height="600"
+                  height="400"
+                  className="md:h-500 lg:h-600"
                   frameBorder="0"
                   scrolling="no"
                   title="pedantic動画投稿カレンダー"
@@ -286,7 +172,7 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl">
           <div className="text-center text-sm text-slate-300">
             <p className="mb-4">&copy; 2026 rt18_formula1. All rights reserved.</p>
-            <div className="flex justify-center gap-6">
+            <div className="flex flex-col justify-center gap-4 md:flex-row md:gap-6">
               <a
                 href="https://x.com/rt18_formula1_x"
                 target="_blank"
