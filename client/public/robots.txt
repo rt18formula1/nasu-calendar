@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yurugakuto-calendar.vercel.app/sitemap.xml
