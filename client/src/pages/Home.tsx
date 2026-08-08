@@ -102,7 +102,7 @@ export default function Home() {
                   style={{ border: 0 }}
                   width="100%"
                   height="400"
-                  className="md:h-500 lg:h-600"
+                  className="md:h-[500px] lg:h-[600px]"
                   frameBorder="0"
                   scrolling="no"
                   title="pedantic動画投稿カレンダー"
