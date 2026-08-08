@@ -1,4 +1,20 @@
 User-agent: *
 Allow: /
 
+# Allow AI crawlers
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: YouBot
+Allow: /
+
 Sitemap: https://yurugakuto-calendar.vercel.app/sitemap.xml
