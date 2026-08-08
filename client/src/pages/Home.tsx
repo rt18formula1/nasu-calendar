@@ -89,6 +89,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* About Section */}
+      <section className="px-4 py-12 bg-gradient-to-b from-white to-slate-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid gap-8 md:grid-cols-2 items-center">
+            <div className="order-2 md:order-1">
+              <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-md">
+                <img
+                  src="/無題 - 2026年8月08日 14.10.24.png"
+                  alt="About pedantic calendar"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
+            <div className="order-1 md:order-2">
+              <p className="text-slate-700 leading-relaxed">
+                ついに株式会社Pedanticのチャンネルまで誕生しPedantic動画を毎日パトロールするゆる学徒でも抜け漏れが出てくるようになってきました。
+                実際にコメントしてみると共感の声もいただけたので毎週投稿のチャンネルのGoogleCalendarを作成しました。
+                是非楽しいゆる学徒ライフにお役立てください。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
       {/* Main Content */}
       <section id="calendar" className="px-4 py-12">
