@@ -92,7 +92,7 @@ export default function Home() {
       {/* About Section */}
       <section className="px-4 py-12 bg-gradient-to-b from-white to-slate-50">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row items-start gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-shrink-0">
               <img
                 src="/無題 - 2026年8月08日 14.10.24.png"
