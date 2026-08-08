@@ -143,7 +143,7 @@ export default function Home() {
       <footer className="border-t border-slate-200 bg-slate-900 px-4 py-8">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center text-sm text-slate-300">
-            <p className="mb-4">&copy; 2026 非公式ファンサイト. All rights reserved.</p>
+            <p className="mb-4">&copy; 2026 rt18_formula1. All rights reserved.</p>
             <div className="flex justify-center gap-6">
               <a
                 href="https://x.com/rt18_formula1_x"
