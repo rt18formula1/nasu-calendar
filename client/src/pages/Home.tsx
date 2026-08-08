@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Calendar, Copy, Download, ExternalLink } from "lucide-react";
+import { Calendar, Copy, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -17,7 +17,6 @@ import { toast } from "sonner";
 const CALENDAR_ID = "5b1c2487b8256ac0966f9699231da20ef9cc6d72d62a77f439b1e8e0e828ce46@group.calendar.google.com";
 const CALENDAR_EMBED_URL = `https://calendar.google.com/calendar/embed?src=${CALENDAR_ID}&ctz=Asia%2FTokyo`;
 const CALENDAR_SUBSCRIBE_URL = `https://calendar.google.com/calendar/u/0?cid=${CALENDAR_ID}`;
-const ICS_DOWNLOAD_URL = `https://calendar.google.com/calendar/ical/${CALENDAR_ID}/public/basic.ics`;
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
@@ -108,29 +107,6 @@ export default function Home() {
                   <a href={CALENDAR_SUBSCRIBE_URL} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
                     購読する
-                  </a>
-                </Button>
-              </Card>
-
-              {/* Download ICS Card */}
-              <Card className="border-slate-200 p-6 hover:shadow-lg transition-all hover:border-[#E8956F]/30 rounded-xl">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="rounded-lg bg-[#E8956F]/10 p-2">
-                    <Download className="h-5 w-5 text-[#E8956F]" />
-                  </div>
-                  <h4 className="font-semibold text-slate-900">ICSファイル</h4>
-                </div>
-                <p className="mb-4 text-sm text-slate-600">
-                  ICS形式でダウンロードして、他のカレンダーアプリに取り込めます。
-                </p>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full border-slate-300 hover:bg-[#E8956F]/5 transition-colors"
-                >
-                  <a href={ICS_DOWNLOAD_URL} download>
-                    <Download className="mr-2 h-4 w-4" />
-                    ダウンロード
                   </a>
                 </Button>
               </Card>
