@@ -33,32 +33,43 @@ function isToday(date: Date): boolean {
          date.getFullYear() === today.getFullYear();
 }
 
-function parseICSDate(dateStr: string): Date {
+function parseICSDate(line: string): Date {
   // Handle ICS date formats: 
-  // - 20260808T120000Z (UTC)
-  // - 20260808T120000 (local)
-  // - 20260808 (date only)
-  // Remove any timezone parameters like ;TZID=Asia/Tokyo
-  const cleanDateStr = dateStr.split(':')[1] || dateStr;
+  // - DTSTART:20260808T200000Z (UTC)
+  // - DTSTART;TZID=Asia/Tokyo:20260808T200000 (with timezone)
+  // - DTSTART:20260808 (date only)
+  
+  // Extract the date part after the colon, removing any timezone parameters
+  const colonIndex = line.indexOf(':');
+  if (colonIndex === -1) return new Date();
+  
+  const dateStr = line.substring(colonIndex + 1);
   
   let year = 0, month = 0, day = 0, hours = 0, minutes = 0;
   
-  if (cleanDateStr.length >= 8) {
-    year = parseInt(cleanDateStr.substring(0, 4));
-    month = parseInt(cleanDateStr.substring(4, 6)) - 1; // JS months are 0-indexed
-    day = parseInt(cleanDateStr.substring(6, 8));
+  if (dateStr.length >= 8) {
+    year = parseInt(dateStr.substring(0, 4));
+    month = parseInt(dateStr.substring(4, 6)) - 1; // JS months are 0-indexed
+    day = parseInt(dateStr.substring(6, 8));
   }
   
-  if (cleanDateStr.length >= 15 && cleanDateStr.includes('T')) {
-    hours = parseInt(cleanDateStr.substring(9, 11));
-    minutes = parseInt(cleanDateStr.substring(11, 13));
+  if (dateStr.length >= 15 && dateStr.includes('T')) {
+    hours = parseInt(dateStr.substring(9, 11));
+    minutes = parseInt(dateStr.substring(11, 13));
   }
   
   const date = new Date(year, month, day, hours, minutes);
   
-  // If the date string ends with 'Z', it's UTC - convert to local time
-  if (cleanDateStr.endsWith('Z')) {
-    return new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+  // If the date string ends with 'Z', it's UTC - convert to local time (JST is UTC+9)
+  if (dateStr.endsWith('Z')) {
+    // Convert UTC to local time by adding 9 hours for JST
+    return new Date(date.getTime() + (9 * 60 * 60 * 1000));
+  }
+  
+  // Check if TZID parameter specifies Asia/Tokyo
+  if (line.includes('TZID=Asia/Tokyo')) {
+    // Already in Tokyo time, no conversion needed
+    return date;
   }
   
   return date;
