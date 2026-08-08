@@ -35,6 +35,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
+            <img src="/favicon.png" alt="Logo" className="h-8 w-8" />
             <h1 className="text-xl font-bold text-slate-900">pedantic calendar</h1>
           </div>
           <nav className="hidden gap-6 md:flex">
