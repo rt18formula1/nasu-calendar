@@ -285,6 +285,14 @@ export default function Home() {
                 Instagram: rt18_formula1
               </a>
               <a
+                href="https://github.com/rt18formula1/nasu-calendar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                GitHub
+              </a>
+              <a
                 href="https://rt18-formula1-official-site.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
