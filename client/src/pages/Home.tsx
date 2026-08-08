@@ -142,7 +142,7 @@ export default function Home() {
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Clock className="h-6 w-6 text-[#E8956F]" />
-              今日の予定
+              今日公開！
             </h3>
             <p className="text-slate-600 mt-1">{formatDate(new Date())}</p>
           </div>
