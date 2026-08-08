@@ -2,9 +2,6 @@
 
 株式会社pedanticの動画投稿スケジュールを確認・共有できるカレンダー配信サイトです。ゆる学徒界隈のラジオの動画公開スケジュールを一覧で確認できます。
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Status](https://img.shields.io/badge/status-active-green.svg)
-
 ## 📋 概要
 
 このサイトは、ゆる学徒界隈の各チャンネルの動画公開スケジュールをGoogleカレンダーで一元管理し、ユーザーが簡単に確認・購読できるようにするために作成されました。
@@ -166,9 +163,6 @@ VITE_ANALYTICS_WEBSITE_ID=your-website-id
 - ファンが運営するサイトなので、株式会社Pedanticに問い合わせするのはおやめください
 - お問い合わせはSNS（X: [@rt18_yurugakuto](https://x.com/rt18_yurugakuto)）までお願いします
 
-## 📄 ライセンス
-
-このプロジェクトはMITライセンスの下でライセンスされています。詳細については[LICENSE](LICENSE)ファイルを参照してください。
 
 ## 📞 お問い合わせ
 
@@ -181,4 +175,4 @@ VITE_ANALYTICS_WEBSITE_ID=your-website-id
 
 ---
 
-Made with ❤️ by rt18_formula1
+rt18_formula1
