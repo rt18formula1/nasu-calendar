@@ -33,6 +33,37 @@ function isToday(date: Date): boolean {
          date.getFullYear() === today.getFullYear();
 }
 
+function parseICSDate(dateStr: string): Date {
+  // Handle ICS date formats: 
+  // - 20260808T120000Z (UTC)
+  // - 20260808T120000 (local)
+  // - 20260808 (date only)
+  // Remove any timezone parameters like ;TZID=Asia/Tokyo
+  const cleanDateStr = dateStr.split(':')[1] || dateStr;
+  
+  let year = 0, month = 0, day = 0, hours = 0, minutes = 0;
+  
+  if (cleanDateStr.length >= 8) {
+    year = parseInt(cleanDateStr.substring(0, 4));
+    month = parseInt(cleanDateStr.substring(4, 6)) - 1; // JS months are 0-indexed
+    day = parseInt(cleanDateStr.substring(6, 8));
+  }
+  
+  if (cleanDateStr.length >= 15 && cleanDateStr.includes('T')) {
+    hours = parseInt(cleanDateStr.substring(9, 11));
+    minutes = parseInt(cleanDateStr.substring(11, 13));
+  }
+  
+  const date = new Date(year, month, day, hours, minutes);
+  
+  // If the date string ends with 'Z', it's UTC - convert to local time
+  if (cleanDateStr.endsWith('Z')) {
+    return new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+  }
+  
+  return date;
+}
+
 function parseICS(icsData: string): CalendarEvent[] {
   const events: CalendarEvent[] = [];
   const lines = icsData.split('\n');
@@ -48,15 +79,14 @@ function parseICS(icsData: string): CalendarEvent[] {
       }
       currentEvent = null;
     } else if (line.startsWith('SUMMARY:') && currentEvent) {
-      currentEvent.title = line.substring(8);
-    } else if (line.startsWith('DTSTART:') && currentEvent) {
-      const dateStr = line.substring(8);
-      currentEvent.startTime = new Date(dateStr.substring(0, 4) + '-' + dateStr.substring(4, 6) + '-' + dateStr.substring(6, 8) + 'T' + dateStr.substring(9, 11) + ':' + dateStr.substring(11, 13) + ':00');
-    } else if (line.startsWith('DTEND:') && currentEvent) {
-      const dateStr = line.substring(6);
-      currentEvent.endTime = new Date(dateStr.substring(0, 4) + '-' + dateStr.substring(4, 6) + '-' + dateStr.substring(6, 8) + 'T' + dateStr.substring(9, 11) + ':' + dateStr.substring(11, 13) + ':00');
+      currentEvent.title = line.substring(8).replace(/\\,/g, ',').replace(/\\;/g, ';');
+    } else if (line.startsWith('DTSTART') && currentEvent) {
+      const dateStr = line.split(':')[1] || line.substring(8);
+      currentEvent.startTime = parseICSDate(line);
+    } else if (line.startsWith('DTEND') && currentEvent) {
+      currentEvent.endTime = parseICSDate(line);
     } else if (line.startsWith('DESCRIPTION:') && currentEvent) {
-      currentEvent.description = line.substring(12);
+      currentEvent.description = line.substring(12).replace(/\\,/g, ',').replace(/\\;/g, ';');
     }
   }
 
@@ -82,7 +112,14 @@ export default function Home() {
         const response = await fetch(ICS_URL);
         const icsData = await response.text();
         const allEvents = parseICS(icsData);
-        const eventsToday = allEvents.filter(event => isToday(event.startTime));
+        console.log('All events parsed:', allEvents);
+        console.log('Today:', new Date());
+        const eventsToday = allEvents.filter(event => {
+          const isEventToday = isToday(event.startTime);
+          console.log(`Event: ${event.title}, Date: ${event.startTime}, Is today: ${isEventToday}`);
+          return isEventToday;
+        });
+        console.log('Today events:', eventsToday);
         setTodayEvents(eventsToday);
       } catch (error) {
         console.error('Failed to fetch calendar events:', error);
