@@ -168,10 +168,11 @@ VITE_ANALYTICS_WEBSITE_ID=your-website-id
 
 - X: [@rt18_yurugakuto](https://x.com/rt18_yurugakuto)
 - Instagram: [rt18_formula1](https://instagram.com/rt18_formula1)
+- Official Web Site: [rt18_formula1](https://rt18-formula1-offical-site.vercel.app)
 
 ## 🙏 謝辞
 
-このカレンダーは、株式会社pedanticおよびゆる学徒界隈の皆様のコンテンツを参考にして作成されています。
+このカレンダーは、株式会社pedanticおよびゆる学徒界隈の皆様のコンテンツを参考にして作成されており、堀本さんからも公認をいただいています。
 
 ---
 
