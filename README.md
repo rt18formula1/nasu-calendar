@@ -160,7 +160,7 @@ VITE_ANALYTICS_WEBSITE_ID=your-website-id
 
 - これは非公式のゆる学徒界隈のラジオの動画公開スケジュールカレンダーです
 - ライブ配信やイベントまでは追加できません
-- ファンが運営するサイトなので、株式会社Pedanticに問い合わせするのはおやめください
+- ファンが運営するサイトなので、株式会社pedanticに問い合わせするのはおやめください
 - お問い合わせはSNS（X: [@rt18_yurugakuto](https://x.com/rt18_yurugakuto)）までお願いします
 
 

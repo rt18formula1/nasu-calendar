@@ -84,7 +84,7 @@ export default function Home() {
             <p className="mb-8 text-lg text-slate-600">
               ※非公式 ゆる学徒界隈のラジオの動画公開スケジュールのカレンダーです。
               <br />
-              ライブ配信やイベントまでは追加できませんがお許しください。ファンが運営するサイトなので株式会社Pedanticに問い合わせするのはおやめください。
+              ライブ配信やイベントまでは追加できませんがお許しください。ファンが運営するサイトなので株式会社pedanticに問い合わせするのはおやめください。
             </p>
           </div>
         </div>
@@ -103,7 +103,7 @@ export default function Home() {
             </div>
             <div className="flex-1">
               <p className="text-slate-700 leading-relaxed">
-                ついに株式会社Pedanticのチャンネルまで誕生しPedantic動画を毎日パトロールするゆる学徒でも抜け漏れが出てくるようになってきました。
+                ついに株式会社pedanticのチャンネルまで誕生しpedantic動画を毎日パトロールするゆる学徒でも抜け漏れが出てくるようになってきました。
                 実際にコメントしてみると共感の声もいただけたので毎週投稿のチャンネルのGoogleCalendarを作成しました。
                 是非楽しいゆる学徒ライフにお役立てください。
               </p>
