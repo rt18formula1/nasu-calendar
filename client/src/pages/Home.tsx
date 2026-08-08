@@ -35,11 +35,6 @@ export default function Home() {
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <img
-              src="/manus-storage/pedantic-logo_e3376925.png"
-              alt="Pedantic Logo"
-              className="h-8 w-8"
-            />
             <h1 className="text-xl font-bold text-slate-900">pedantic calendar</h1>
           </div>
           <nav className="hidden gap-6 md:flex">
@@ -61,11 +56,9 @@ export default function Home() {
               pedantic動画投稿カレンダー
             </h2>
             <p className="mb-8 text-lg text-slate-600">
-              ※非公式
+              ※非公式 ゆる学徒界隈のラジオの動画公開スケジュールのカレンダーです。
               <br />
-              ゆる学徒界隈ラジオの動画公開スケジュールに合わせたカレンダーです。
-              <br />
-              ライブ配信やイベントまでは追加できませんのがお許しください。
+              ライブ配信やイベントまでは追加できませんがお許しください。ファンが運営するサイトなので株式会社Pedanticに問い合わせするのはおやめください。
             </p>
           </div>
         </div>
@@ -174,7 +167,25 @@ export default function Home() {
       <footer className="border-t border-slate-200 bg-slate-900 px-4 py-8">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center text-sm text-slate-300">
-            <p>&copy; 2026 非公式ファンサイト. All rights reserved.</p>
+            <p className="mb-4">&copy; 2026 非公式ファンサイト. All rights reserved.</p>
+            <div className="flex justify-center gap-6">
+              <a
+                href="https://x.com/rt18_formula1_x"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                X: rt18_formula1_x
+              </a>
+              <a
+                href="https://instagram.com/rt18_formula1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                Instagram: rt18_formula1
+              </a>
+            </div>
           </div>
         </div>
       </footer>
