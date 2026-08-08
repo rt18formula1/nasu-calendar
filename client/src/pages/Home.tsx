@@ -269,12 +269,12 @@ export default function Home() {
             <p className="mb-4">&copy; 2026 rt18_formula1. All rights reserved.</p>
             <div className="flex flex-col justify-center gap-4 md:flex-row md:gap-6">
               <a
-                href="https://x.com/rt18_formula1_x"
+                href="https://x.com/rt18_yurugakuto"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-300 hover:text-white transition-colors"
               >
-                X: rt18_formula1_x
+                X: @rt18_yurugakuto
               </a>
               <a
                 href="https://instagram.com/rt18_formula1"
@@ -285,6 +285,9 @@ export default function Home() {
                 Instagram: rt18_formula1
               </a>
             </div>
+            <p className="mt-4 text-xs text-slate-400">
+              ※お問い合わせはSNSまで
+            </p>
           </div>
         </div>
       </footer>
