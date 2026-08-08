@@ -134,7 +134,7 @@ export default function Home() {
                 >
                   <a href={CALENDAR_SUBSCRIBE_URL} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
-                    購読する
+                    カレンダーに追加
                   </a>
                 </Button>
               </Card>
