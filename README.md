@@ -32,8 +32,6 @@
 - 歌舞伎町にかぶりつけ!【かぶかぶ】
 - 株式会社pedantic
 
-## 🚀 デモ
-
 [https://yurugakuto-calendar.vercel.app](https://yurugakuto-calendar.vercel.app)
 
 ## 🛠️ 技術スタック
@@ -124,14 +122,6 @@ pedantic-calendar-site/
 └── vercel.json          # Vercel設定
 ```
 
-## 🔧 環境変数
-
-以下の環境変数を設定する必要があります：
-
-```env
-VITE_ANALYTICS_ENDPOINT=https://your-analytics-endpoint.com
-VITE_ANALYTICS_WEBSITE_ID=your-website-id
-```
 
 ## 📝 週間スケジュール
 
