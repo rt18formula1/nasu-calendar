@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Calendar, Copy, ExternalLink, Menu, X } from "lucide-react";
+import { Calendar, Copy, ExternalLink, Menu, Share2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -29,6 +29,14 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleShare = () => {
+    const shareUrl = "https://yurugakuto-calendar.vercel.app/";
+    const shareText = "ゆる学徒界隈の動画公開スケジュールを確認できるカレンダー！";
+    const shareAccount = "@rt18_yurugakuto";
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&via=${shareAccount.replace("@", "")}`;
+    window.open(twitterUrl, "_blank", "width=550,height=420");
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -38,20 +46,31 @@ export default function Home() {
             <img src="/favicon.png" alt="Logo" className="h-8 w-8" />
             <h1 className="text-xl font-bold text-slate-900">pedantic calendar</h1>
           </div>
-          <nav className="hidden gap-6 md:flex">
-            <a href="#calendar" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-              カレンダー
-            </a>
-            <a href="#distribute" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-              配布方法
-            </a>
-          </nav>
-          <button
-            className="md:hidden p-2 text-slate-600 hover:text-slate-900"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          <div className="flex items-center gap-4">
+            <nav className="hidden gap-6 md:flex">
+              <a href="#calendar" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                カレンダー
+              </a>
+              <a href="#distribute" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                配布方法
+              </a>
+            </nav>
+            <Button
+              onClick={handleShare}
+              variant="outline"
+              size="sm"
+              className="hidden md:flex items-center gap-2 border-slate-300 hover:bg-slate-50 transition-colors"
+            >
+              <Share2 className="h-4 w-4" />
+              シェア
+            </Button>
+            <button
+              className="md:hidden p-2 text-slate-600 hover:text-slate-900"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
         {/* Mobile Menu */}
         {mobileMenuOpen && (
@@ -70,6 +89,18 @@ export default function Home() {
             >
               配布方法
             </a>
+            <Button
+              onClick={() => {
+                handleShare();
+                setMobileMenuOpen(false);
+              }}
+              variant="outline"
+              size="sm"
+              className="mt-2 w-full items-center gap-2 border-slate-300 hover:bg-slate-50 transition-colors"
+            >
+              <Share2 className="h-4 w-4" />
+              シェア
+            </Button>
           </nav>
         )}
       </header>
