@@ -21,6 +21,7 @@ const CALENDAR_SUBSCRIBE_URL = `https://calendar.google.com/calendar/u/0?cid=${C
 export default function Home() {
   const [copied, setCopied] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [calendarAdded, setCalendarAdded] = useState(false);
 
   const handleCopyCalendarId = () => {
     navigator.clipboard.writeText(CALENDAR_ID);
@@ -35,6 +36,10 @@ export default function Home() {
     const shareAccount = "@rt18_yurugakuto";
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&via=${shareAccount.replace("@", "")}`;
     window.open(twitterUrl, "_blank", "width=550,height=420");
+  };
+
+  const handleCalendarSubscribe = () => {
+    setCalendarAdded(true);
   };
 
   return (
@@ -62,7 +67,7 @@ export default function Home() {
               className="hidden md:flex items-center gap-2 border-slate-300 hover:bg-slate-50 transition-colors"
             >
               <Share2 className="h-4 w-4" />
-              シェア
+              Xにシェア
             </Button>
             <button
               className="md:hidden p-2 text-slate-600 hover:text-slate-900"
@@ -99,7 +104,7 @@ export default function Home() {
               className="mt-2 w-full items-center gap-2 border-slate-300 hover:bg-slate-50 transition-colors"
             >
               <Share2 className="h-4 w-4" />
-              シェア
+              Xにシェア
             </Button>
           </nav>
         )}
@@ -257,12 +262,29 @@ export default function Home() {
                 <Button
                   asChild
                   className="w-full bg-[#5B4B8A] hover:bg-[#4a3a73] transition-colors"
+                  onClick={handleCalendarSubscribe}
                 >
                   <a href={CALENDAR_SUBSCRIBE_URL} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
                     カレンダーに追加
                   </a>
                 </Button>
+                {calendarAdded && (
+                  <div className="mt-4 rounded-lg bg-gradient-to-r from-[#5B4B8A]/10 to-[#E8956F]/10 p-4 border border-[#5B4B8A]/20">
+                    <p className="mb-3 text-sm font-medium text-slate-700">
+                      🎉 カレンダーに追加しました！
+                    </p>
+                    <Button
+                      onClick={handleShare}
+                      variant="outline"
+                      size="sm"
+                      className="w-full items-center gap-2 border-[#5B4B8A]/30 hover:bg-[#5B4B8A]/5 transition-colors"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      このカレンダーをXにシェアしませんか？
+                    </Button>
+                  </div>
+                )}
               </Card>
 
               {/* Calendar ID Card */}
