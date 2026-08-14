@@ -218,6 +218,10 @@ export default function Home() {
                     <span className="font-medium text-slate-900">ゆる天文学ラジオ</span>
                   </li>
                   <li className="flex justify-between items-center text-sm">
+                    <span className="text-slate-600">金 午後5時</span>
+                    <span className="font-medium text-slate-900">積読チャンネル</span>
+                  </li>
+                  <li className="flex justify-between items-center text-sm">
                     <span className="text-slate-600">金 午後7時</span>
                     <span className="font-medium text-slate-900">株式会社pedantic</span>
                   </li>
