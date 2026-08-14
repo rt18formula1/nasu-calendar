@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { AuthButton } from "@/components/AuthButton";
+import { ScheduleItem } from "@/components/ScheduleItem";
 import { Calendar, Copy, ExternalLink, Menu, Share2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
+import { useEffect } from "react";
 
 /**
  * Home Page - pedantic動画投稿カレンダー配布サイト
@@ -22,6 +27,23 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [calendarAdded, setCalendarAdded] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleCopyCalendarId = () => {
     navigator.clipboard.writeText(CALENDAR_ID);
@@ -60,6 +82,7 @@ export default function Home() {
                 配布方法
               </a>
             </nav>
+            <AuthButton />
             <Button
               onClick={handleShare}
               variant="outline"
@@ -106,6 +129,9 @@ export default function Home() {
               <Share2 className="h-4 w-4" />
               Xにシェア
             </Button>
+            <div className="mt-2">
+              <AuthButton />
+            </div>
           </nav>
         )}
       </header>
@@ -176,68 +202,28 @@ export default function Home() {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-slate-900">スケジュール</h3>
               <Card className="border-slate-200 p-6 rounded-xl">
-                <ul className="space-y-3">
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">日 午前9:45</span>
-                    <span className="font-medium text-slate-900">ゆるコンピュータ科学ラジオ</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">日 午後8時</span>
-                    <span className="font-medium text-slate-900">ゆる民俗学ラジオ</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">月 午後4時</span>
-                    <span className="font-medium text-slate-900">博士と道化師</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">月 午後5時</span>
-                    <span className="font-medium text-slate-900">積読チャンネル</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">火 午後6:45</span>
-                    <span className="font-medium text-slate-900">ゆる言語学ラジオ</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">火 午後8時</span>
-                    <span className="font-medium text-slate-900">煩悩どこまでも</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">水 午後6:45</span>
-                    <span className="font-medium text-slate-900">ゆる学徒カフェ</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">水 午後8時</span>
-                    <span className="font-medium text-slate-900">白黒つけない会議</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">木 午後6時</span>
-                    <span className="font-medium text-slate-900">歌舞伎町にかぶりつけ!【かぶかぶ】</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">木 午後8時</span>
-                    <span className="font-medium text-slate-900">ゆる天文学ラジオ</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">金 午後5時</span>
-                    <span className="font-medium text-slate-900">積読チャンネル</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">金 午後7時</span>
-                    <span className="font-medium text-slate-900">株式会社pedantic</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">金 午後8時</span>
-                    <span className="font-medium text-slate-900">ゆる音楽学ラジオ</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">土 午前9:45</span>
-                    <span className="font-medium text-slate-900">白黒つけない会議</span>
-                  </li>
-                  <li className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">土 午後8時</span>
-                    <span className="font-medium text-slate-900">ゆる哲学ラジオ</span>
-                  </li>
-                </ul>
+                <div className="space-y-0">
+                  <ScheduleItem day="日" time="午前9:45" channelName="ゆるコンピュータ科学ラジオ" userId={user?.id ?? null} />
+                  <ScheduleItem day="日" time="午後8時" channelName="ゆる民俗学ラジオ" userId={user?.id ?? null} />
+                  <ScheduleItem day="月" time="午後4時" channelName="博士と道化師" userId={user?.id ?? null} />
+                  <ScheduleItem day="月" time="午後5時" channelName="積読チャンネル" userId={user?.id ?? null} />
+                  <ScheduleItem day="火" time="午後6:45" channelName="ゆる言語学ラジオ" userId={user?.id ?? null} />
+                  <ScheduleItem day="火" time="午後8時" channelName="煩悩どこまでも" userId={user?.id ?? null} />
+                  <ScheduleItem day="水" time="午後6:45" channelName="ゆる学徒カフェ" userId={user?.id ?? null} />
+                  <ScheduleItem day="水" time="午後8時" channelName="白黒つけない会議" userId={user?.id ?? null} />
+                  <ScheduleItem day="木" time="午後6時" channelName="歌舞伎町にかぶりつけ!【かぶかぶ】" userId={user?.id ?? null} />
+                  <ScheduleItem day="木" time="午後8時" channelName="ゆる天文学ラジオ" userId={user?.id ?? null} />
+                  <ScheduleItem day="金" time="午後5時" channelName="積読チャンネル" userId={user?.id ?? null} />
+                  <ScheduleItem day="金" time="午後7時" channelName="株式会社pedantic" userId={user?.id ?? null} />
+                  <ScheduleItem day="金" time="午後8時" channelName="ゆる音楽学ラジオ" userId={user?.id ?? null} />
+                  <ScheduleItem day="土" time="午前9:45" channelName="白黒つけない会議" userId={user?.id ?? null} />
+                  <ScheduleItem day="土" time="午後8時" channelName="ゆる哲学ラジオ" userId={user?.id ?? null} />
+                </div>
+                {!user && (
+                  <p className="mt-4 text-xs text-slate-400 text-center">
+                    ログインするとチェックマークとメモ機能が使えます
+                  </p>
+                )}
               </Card>
             </div>
           </div>
