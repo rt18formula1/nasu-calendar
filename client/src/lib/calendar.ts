@@ -4,6 +4,7 @@ const API_KEY = import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY;
 export interface CalendarEvent {
   id: string;
   summary: string;
+  description?: string;
   start: {
     dateTime?: string;
     date?: string;

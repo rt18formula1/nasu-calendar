@@ -1,6 +1,8 @@
 import { CalendarEvent, formatEventDate } from "@/lib/calendar";
 import { CalendarEventItem } from "@/components/CalendarEventItem";
+import { EventDetailDialog } from "@/components/EventDetailDialog";
 import { User } from "@supabase/supabase-js";
+import { useState } from "react";
 
 interface MonthlyCalendarProps {
   events: CalendarEvent[];
@@ -9,6 +11,8 @@ interface MonthlyCalendarProps {
 }
 
 export function MonthlyCalendar({ events, selectedDate, userId }: MonthlyCalendarProps) {
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const year = selectedDate.getFullYear();
   const month = selectedDate.getMonth();
 
@@ -66,8 +70,12 @@ export function MonthlyCalendar({ events, selectedDate, userId }: MonthlyCalenda
                 {dayEvents.slice(0, 3).map(event => (
                   <div
                     key={event.id}
-                    className="text-xs bg-[#5B4B8A]/10 text-[#5B4B8A] px-1 py-0.5 rounded truncate"
+                    className="text-xs bg-[#5B4B8A]/10 text-[#5B4B8A] px-1 py-0.5 rounded truncate cursor-pointer hover:bg-[#5B4B8A]/20"
                     title={event.summary}
+                    onClick={() => {
+                      setSelectedEvent(event);
+                      setDialogOpen(true);
+                    }}
                   >
                     {event.summary}
                   </div>
@@ -82,6 +90,15 @@ export function MonthlyCalendar({ events, selectedDate, userId }: MonthlyCalenda
           );
         })}
       </div>
+      <EventDetailDialog
+        event={selectedEvent}
+        open={dialogOpen}
+        onClose={() => {
+          setDialogOpen(false);
+          setSelectedEvent(null);
+        }}
+        userId={userId}
+      />
     </div>
   );
 }
