@@ -35,42 +35,43 @@ export function WeeklyTimeSchedule({ events, selectedDate, userId }: WeeklyTimeS
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-5 gap-2">
-        <div className="text-sm font-medium text-slate-600 py-2 text-center">時間</div>
-        {days.map((date, index) => (
-          <div key={index} className="text-sm font-medium text-slate-600 py-2 text-center">
-            {weekDays[date.getDay()]} {date.getDate()}日
-          </div>
-        ))}
-      </div>
-      <div className="space-y-1">
-        {hours.map(hour => (
-          <div key={hour} className="grid grid-cols-5 gap-2">
-            <div className="text-xs text-slate-500 py-2 text-center">
-              {hour}:00
-            </div>
-            {days.map((date, dayIndex) => {
-              const hourEvents = getEventsForDayAndHour(date, hour);
-              return (
-                <div
-                  key={dayIndex}
-                  className="min-h-[40px] border border-slate-200 rounded p-1 bg-white"
-                >
-                  {hourEvents.map(event => (
-                    <div
-                      key={event.id}
-                      className="text-xs bg-[#5B4B8A]/10 text-[#5B4B8A] px-1 py-0.5 rounded truncate mb-1"
-                      title={event.summary}
-                    >
-                      {event.summary}
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <th className="border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 text-center">時間</th>
+            {days.map((date, index) => (
+              <th key={index} className="border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 text-center">
+                {weekDays[date.getDay()]} {date.getDate()}日
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {hours.map(hour => (
+            <tr key={hour}>
+              <td className="border border-slate-300 px-2 py-1 text-xs text-slate-600 text-center">
+                {hour}:00
+              </td>
+              {days.map((date, dayIndex) => {
+                const hourEvents = getEventsForDayAndHour(date, hour);
+                return (
+                  <td key={dayIndex} className="border border-slate-300 px-1 py-1 align-top">
+                    {hourEvents.map(event => (
+                      <div
+                        key={event.id}
+                        className="text-[10px] bg-[#5B4B8A]/10 text-[#5B4B8A] px-1 py-0.5 rounded truncate mb-0.5"
+                        title={event.summary}
+                      >
+                        {event.summary}
+                      </div>
+                    ))}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

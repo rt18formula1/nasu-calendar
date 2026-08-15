@@ -36,6 +36,7 @@ export default function Home() {
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [calendarView, setCalendarView] = useState<'monthly' | 'weekly' | 'list'>('monthly');
+  const [listOffset, setListOffset] = useState(0);
 
   useEffect(() => {
     // Get initial session
@@ -326,9 +327,36 @@ export default function Home() {
                           イベントが見つかりません
                         </div>
                       ) : (
-                        calendarEvents.map((event) => (
-                          <CalendarEventItem key={event.id} event={event} userId={user?.id ?? null} />
-                        ))
+                        <>
+                          <div className="space-y-0 max-h-[400px] overflow-y-auto">
+                            {calendarEvents.slice(listOffset, listOffset + 10).map((event) => (
+                              <CalendarEventItem key={event.id} event={event} userId={user?.id ?? null} />
+                            ))}
+                          </div>
+                          {calendarEvents.length > 10 && (
+                            <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
+                              <Button
+                                onClick={() => setListOffset(Math.max(0, listOffset - 10))}
+                                disabled={listOffset === 0}
+                                variant="outline"
+                                size="sm"
+                              >
+                                前の10件
+                              </Button>
+                              <span className="text-sm text-slate-600">
+                                {listOffset + 1}-{Math.min(listOffset + 10, calendarEvents.length)} / {calendarEvents.length}
+                              </span>
+                              <Button
+                                onClick={() => setListOffset(Math.min(calendarEvents.length - 10, listOffset + 10))}
+                                disabled={listOffset + 10 >= calendarEvents.length}
+                                variant="outline"
+                                size="sm"
+                              >
+                                次の10件
+                              </Button>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   )}
