@@ -184,12 +184,12 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
               <Button
                 onClick={handleCheck}
                 disabled={loading}
-                variant="ghost"
+                variant="outline"
                 size="sm"
-                className={`h-10 w-10 p-0 rounded-full ${
+                className={`h-10 w-10 p-0 rounded-full border-2 ${
                   checked
-                    ? "bg-green-500 hover:bg-green-600 text-white"
-                    : "hover:bg-slate-200 text-slate-400"
+                    ? "bg-[#5B4B8A] border-[#5B4B8A] text-white hover:bg-[#4a3a73]"
+                    : "border-slate-300 text-slate-400 hover:border-[#5B4B8A] hover:text-[#5B4B8A]"
                 }`}
               >
                 <Check className="h-5 w-5" />

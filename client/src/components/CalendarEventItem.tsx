@@ -88,12 +88,12 @@ export function CalendarEventItem({ event, userId }: CalendarItemProps) {
         <Button
           onClick={handleCheck}
           disabled={loading || !userId}
-          variant="ghost"
+          variant="outline"
           size="sm"
-          className={`h-8 w-8 p-0 rounded-full ${
+          className={`h-8 w-8 p-0 rounded-full border-2 ${
             checked
-              ? "bg-green-500 hover:bg-green-600 text-white"
-              : "hover:bg-slate-100 text-slate-400"
+              ? "bg-[#5B4B8A] border-[#5B4B8A] text-white hover:bg-[#4a3a73]"
+              : "border-slate-300 text-slate-400 hover:border-[#5B4B8A] hover:text-[#5B4B8A]"
           }`}
         >
           {checked ? <Check className="h-4 w-4" /> : <div className="h-4 w-4" />}
