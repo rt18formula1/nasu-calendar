@@ -39,35 +39,45 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
   const loadCheckStatus = async () => {
     if (!userId) return;
 
-    const { data, error } = await supabase
-      .from('schedule_checks')
-      .select('id, checked_at')
-      .eq('user_id', userId)
-      .eq('day_of_week', day)
-      .eq('time', time)
-      .eq('channel_name', channelName)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('schedule_checks')
+        .select('id, checked_at')
+        .eq('user_id', userId)
+        .eq('day_of_week', day)
+        .eq('time', time)
+        .eq('channel_name', channelName)
+        .single();
 
-    if (data && !error) {
-      setChecked(true);
-}
+      if (data && !error) {
+        setChecked(true);
+      }
+    } catch (error) {
+      console.error("Error loading check status:", error);
+      // Don't throw error, just continue without check status
+    }
   };
 
   const loadNote = async () => {
     if (!userId) return;
 
-    const { data, error } = await supabase
-      .from('schedule_notes')
-      .select('id, note')
-      .eq('user_id', userId)
-      .eq('day_of_week', day)
-      .eq('time', time)
-      .eq('channel_name', channelName)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('schedule_notes')
+        .select('id, note')
+        .eq('user_id', userId)
+        .eq('day_of_week', day)
+        .eq('time', time)
+        .eq('channel_name', channelName)
+        .single();
 
-    if (data && !error) {
-      setExistingNote(data);
-      setNote(data.note);
+      if (data && !error) {
+        setExistingNote(data);
+        setNote(data.note);
+      }
+    } catch (error) {
+      console.error("Error loading note:", error);
+      // Don't throw error, just continue without note
     }
   };
 
