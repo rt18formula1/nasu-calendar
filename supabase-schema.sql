@@ -1,3 +1,6 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Drop existing policies and tables (only if they exist)
 DO $$ 
 BEGIN
