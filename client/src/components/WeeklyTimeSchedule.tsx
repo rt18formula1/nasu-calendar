@@ -38,12 +38,12 @@ export function WeeklyTimeSchedule({ events, selectedDate, userId }: WeeklyTimeS
 
   return (
     <div className="space-y-4">
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse table-fixed">
         <thead>
           <tr>
-            <th className="border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 text-center w-16">時間</th>
+            <th className="border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 text-center" style={{ width: '4rem' }}>時間</th>
             {days.map((date, index) => (
-              <th key={index} className="border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 text-center w-16">
+              <th key={index} className="border border-slate-300 bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 text-center" style={{ width: '4rem' }}>
                 {weekDays[date.getDay()]} {date.getDate()}日
               </th>
             ))}
@@ -52,13 +52,13 @@ export function WeeklyTimeSchedule({ events, selectedDate, userId }: WeeklyTimeS
         <tbody>
           {hours.map(hour => (
             <tr key={hour}>
-              <td className="border border-slate-300 px-2 py-1 text-xs text-slate-600 text-center w-16">
+              <td className="border border-slate-300 px-2 py-1 text-xs text-slate-600 text-center" style={{ width: '4rem' }}>
                 {hour}:00
               </td>
               {days.map((date, dayIndex) => {
                 const hourEvents = getEventsForDayAndHour(date, hour);
                 return (
-                  <td key={dayIndex} className="border border-slate-300 px-1 py-1 align-top w-16">
+                  <td key={dayIndex} className="border border-slate-300 px-1 py-1 align-top" style={{ width: '4rem' }}>
                     {hourEvents.map(event => (
                       <div
                         key={event.id}
