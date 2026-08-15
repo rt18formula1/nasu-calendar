@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase";
-import { Check, ChevronDown, ChevronUp, MessageSquare, X } from "lucide-react";
+import { Check, MessageSquare, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,7 +25,6 @@ interface ScheduleNote {
 export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemProps) {
   const [checked, setChecked] = useState(false);
   const [note, setNote] = useState("");
-  const [showNoteInput, setShowNoteInput] = useState(false);
   const [existingNote, setExistingNote] = useState<ScheduleNote | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -161,7 +160,6 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
       }
 
       await loadNote();
-      setShowNoteInput(false);
     } catch (error) {
       toast.error("エラーが発生しました");
       console.error(error);
@@ -214,58 +212,44 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
             <span className="text-sm text-slate-600 w-20">{time}</span>
             <span className="text-sm font-medium text-slate-900">{channelName}</span>
           </div>
-          {existingNote && !showNoteInput && (
-            <div className="mt-1 ml-36 flex items-center gap-2">
-              <MessageSquare className="h-3 w-3 text-slate-400" />
-              <span className="text-xs text-slate-500">{existingNote.note}</span>
+          {userId && (
+            <div className="mt-2 ml-36">
+              <div className="flex items-center gap-2 mb-2">
+                <MessageSquare className="h-4 w-4 text-slate-500" />
+                <p className="text-sm font-medium text-slate-700">メモ</p>
+              </div>
+              <textarea
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="メモを入力..."
+                className="w-full text-sm border border-slate-200 rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#5B4B8A]"
+                rows={2}
+              />
+              <div className="flex gap-2 mt-2">
+                <Button
+                  onClick={handleSaveNote}
+                  disabled={loading}
+                  size="sm"
+                  className="bg-[#5B4B8A] hover:bg-[#4a3a73]"
+                >
+                  保存
+                </Button>
+                {existingNote && (
+                  <Button
+                    onClick={handleDeleteNote}
+                    disabled={loading}
+                    variant="outline"
+                    size="sm"
+                    className="border-red-300 hover:bg-red-50 text-red-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             </div>
           )}
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        {userId && (
-          <Button
-            onClick={() => setShowNoteInput(!showNoteInput)}
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0"
-          >
-            {showNoteInput ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-          </Button>
-        )}
-      </div>
-      {showNoteInput && userId && (
-        <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-slate-200 p-3 z-10">
-          <textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="メモを入力..."
-            className="w-full text-sm border border-slate-200 rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#5B4B8A]"
-            rows={3}
-          />
-          <div className="flex gap-2 mt-2">
-            <Button
-              onClick={handleSaveNote}
-              disabled={loading}
-              size="sm"
-              className="flex-1 bg-[#5B4B8A] hover:bg-[#4a3a73]"
-            >
-              保存
-            </Button>
-            {existingNote && (
-              <Button
-                onClick={handleDeleteNote}
-                disabled={loading}
-                variant="outline"
-                size="sm"
-                className="border-red-300 hover:bg-red-50 text-red-600"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
