@@ -59,6 +59,7 @@ export default function Home() {
   }, [selectedDate, calendarView]);
 
   const loadCalendarEvents = async () => {
+    setLoadingEvents(true);
     try {
       let startDate: Date;
       let endDate: Date;
@@ -78,11 +79,14 @@ export default function Home() {
         endDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
       }
 
+      console.log("Loading calendar events from", startDate, "to", endDate);
       const events = await getCalendarEvents(startDate, endDate);
+      console.log("Loaded events:", events.length, events);
       setCalendarEvents(events);
     } catch (error) {
       console.error("Failed to load calendar events:", error);
       toast.error("カレンダーイベントの読み込みに失敗しました");
+      setCalendarEvents([]); // Ensure we set empty array on error
     } finally {
       setLoadingEvents(false);
     }
