@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { useEffect } from "react";
+import { getCalendarEvents, CalendarEvent } from "@/lib/calendar";
 
 /**
  * Home Page - pedantic動画投稿カレンダー配布サイト
@@ -28,6 +29,8 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [calendarAdded, setCalendarAdded] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
 
   useEffect(() => {
     // Get initial session
@@ -44,6 +47,22 @@ export default function Home() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    loadCalendarEvents();
+  }, []);
+
+  const loadCalendarEvents = async () => {
+    try {
+      const events = await getCalendarEvents();
+      setCalendarEvents(events);
+    } catch (error) {
+      console.error("Failed to load calendar events:", error);
+      toast.error("カレンダーイベントの読み込みに失敗しました");
+    } finally {
+      setLoadingEvents(false);
+    }
+  };
 
   const handleCopyCalendarId = () => {
     navigator.clipboard.writeText(CALENDAR_ID);
@@ -202,23 +221,21 @@ export default function Home() {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-slate-900">スケジュール</h3>
               <Card className="border-slate-200 p-6 rounded-xl">
-                <div className="space-y-0">
-                  <ScheduleItem day="日" time="午前9:45" channelName="ゆるコンピュータ科学ラジオ" userId={user?.id ?? null} />
-                  <ScheduleItem day="日" time="午後8時" channelName="ゆる民俗学ラジオ" userId={user?.id ?? null} />
-                  <ScheduleItem day="月" time="午後4時" channelName="博士と道化師" userId={user?.id ?? null} />
-                  <ScheduleItem day="月" time="午後5時" channelName="積読チャンネル" userId={user?.id ?? null} />
-                  <ScheduleItem day="火" time="午後6:45" channelName="ゆる言語学ラジオ" userId={user?.id ?? null} />
-                  <ScheduleItem day="火" time="午後8時" channelName="煩悩どこまでも" userId={user?.id ?? null} />
-                  <ScheduleItem day="水" time="午後6:45" channelName="ゆる学徒カフェ" userId={user?.id ?? null} />
-                  <ScheduleItem day="水" time="午後8時" channelName="白黒つけない会議" userId={user?.id ?? null} />
-                  <ScheduleItem day="木" time="午後6時" channelName="歌舞伎町にかぶりつけ!【かぶかぶ】" userId={user?.id ?? null} />
-                  <ScheduleItem day="木" time="午後8時" channelName="ゆる天文学ラジオ" userId={user?.id ?? null} />
-                  <ScheduleItem day="金" time="午後5時" channelName="積読チャンネル" userId={user?.id ?? null} />
-                  <ScheduleItem day="金" time="午後7時" channelName="株式会社pedantic" userId={user?.id ?? null} />
-                  <ScheduleItem day="金" time="午後8時" channelName="ゆる音楽学ラジオ" userId={user?.id ?? null} />
-                  <ScheduleItem day="土" time="午前9:45" channelName="白黒つけない会議" userId={user?.id ?? null} />
-                  <ScheduleItem day="土" time="午後8時" channelName="ゆる哲学ラジオ" userId={user?.id ?? null} />
-                </div>
+                {loadingEvents ? (
+                  <div className="text-center py-8 text-slate-500">
+                    カレンダーイベントを読み込み中...
+                  </div>
+                ) : calendarEvents.length === 0 ? (
+                  <div className="text-center py-8 text-slate-500">
+                    イベントが見つかりません
+                  </div>
+                ) : (
+                  <div className="space-y-0">
+                    {calendarEvents.map((event) => (
+                      <ScheduleItem key={event.id} event={event} userId={user?.id ?? null} />
+                    ))}
+                  </div>
+                )}
                 {!user && (
                   <p className="mt-4 text-xs text-slate-400 text-center">
                     ログインするとチェックマークとメモ機能が使えます

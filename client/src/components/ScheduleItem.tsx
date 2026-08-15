@@ -4,11 +4,10 @@ import { supabase } from "@/lib/supabase";
 import { Check, ChevronDown, ChevronUp, MessageSquare, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { CalendarEvent, formatEventDate } from "@/lib/calendar";
 
 interface ScheduleItemProps {
-  day: string;
-  time: string;
-  channelName: string;
+  event: CalendarEvent;
   userId: string | null;
 }
 
@@ -22,7 +21,7 @@ interface ScheduleNote {
   note: string;
 }
 
-export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemProps) {
+export function ScheduleItem({ event, userId }: ScheduleItemProps) {
   const [checked, setChecked] = useState(false);
   const [note, setNote] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
@@ -34,7 +33,7 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
       loadCheckStatus();
       loadNote();
     }
-  }, [userId, day, time, channelName]);
+  }, [userId, event.id]);
 
   const loadCheckStatus = async () => {
     if (!userId) return;
@@ -43,9 +42,7 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
       .from('schedule_checks')
       .select('id, checked_at')
       .eq('user_id', userId)
-      .eq('day_of_week', day)
-      .eq('time', time)
-      .eq('channel_name', channelName)
+      .eq('event_id', event.id)
       .single();
 
     if (data && !error) {
@@ -60,9 +57,7 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
       .from('schedule_notes')
       .select('id, note')
       .eq('user_id', userId)
-      .eq('day_of_week', day)
-      .eq('time', time)
-      .eq('channel_name', channelName)
+      .eq('event_id', event.id)
       .single();
 
     if (data && !error) {
@@ -85,9 +80,7 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
           .from('schedule_checks')
           .delete()
           .eq('user_id', userId)
-          .eq('day_of_week', day)
-          .eq('time', time)
-          .eq('channel_name', channelName);
+          .eq('event_id', event.id);
 
         if (error) throw error;
         setChecked(false);
@@ -98,9 +91,7 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
           .from('schedule_checks')
           .insert({
             user_id: userId,
-            day_of_week: day,
-            time,
-            channel_name: channelName
+            event_id: event.id
           });
 
         if (error) throw error;
@@ -138,9 +129,7 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
           .from('schedule_notes')
           .insert({
             user_id: userId,
-            day_of_week: day,
-            time,
-            channel_name: channelName,
+            event_id: event.id,
             note
           });
 
@@ -180,6 +169,8 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
     }
   };
 
+  const formattedDate = formatEventDate(event);
+
   return (
     <div className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
       <div className="flex items-center gap-3 flex-1">
@@ -198,12 +189,11 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
         </Button>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-600 w-16">{day}</span>
-            <span className="text-sm text-slate-600 w-20">{time}</span>
-            <span className="text-sm font-medium text-slate-900">{channelName}</span>
+            <span className="text-sm text-slate-600 w-24">{formattedDate}</span>
+            <span className="text-sm font-medium text-slate-900">{event.summary}</span>
           </div>
           {existingNote && !showNoteInput && (
-            <div className="mt-1 ml-36 flex items-center gap-2">
+            <div className="mt-1 ml-28 flex items-center gap-2">
               <MessageSquare className="h-3 w-3 text-slate-400" />
               <span className="text-xs text-slate-500">{existingNote.note}</span>
             </div>
