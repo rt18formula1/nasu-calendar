@@ -249,19 +249,95 @@ export default function Home() {
       <section id="calendar" className="px-4 py-12">
         <div className="container mx-auto max-w-6xl">
           <div className="grid gap-8 lg:grid-cols-3">
-            {/* Calendar Embed */}
+            {/* Calendar Views */}
             <div className="lg:col-span-2">
               <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-md hover:shadow-lg transition-shadow">
-                <iframe
-                  src={CALENDAR_EMBED_URL}
-                  style={{ border: 0 }}
-                  width="100%"
-                  height="400"
-                  className="md:h-[500px] lg:h-[600px]"
-                  frameBorder="0"
-                  scrolling="no"
-                  title="pedantic動画投稿カレンダー"
-                />
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-slate-900">カレンダー</h3>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 border border-slate-200 rounded-lg p-1">
+                        <Button
+                          onClick={() => setCalendarView('monthly')}
+                          variant={calendarView === 'monthly' ? 'default' : 'ghost'}
+                          size="sm"
+                          className={`text-xs ${calendarView === 'monthly' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
+                        >
+                          月
+                        </Button>
+                        <Button
+                          onClick={() => setCalendarView('weekly')}
+                          variant={calendarView === 'weekly' ? 'default' : 'ghost'}
+                          size="sm"
+                          className={`text-xs ${calendarView === 'weekly' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
+                        >
+                          週
+                        </Button>
+                        <Button
+                          onClick={() => setCalendarView('list')}
+                          variant={calendarView === 'list' ? 'default' : 'ghost'}
+                          size="sm"
+                          className={`text-xs ${calendarView === 'list' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
+                        >
+                          リスト
+                        </Button>
+                      </div>
+                      <Button
+                        onClick={handlePreviousMonth}
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <span className="text-sm font-medium text-slate-700 min-w-[100px] text-center">
+                        {formatMonth(selectedDate)}
+                      </span>
+                      <Button
+                        onClick={handleNextMonth}
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        onClick={handleToday}
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs"
+                      >
+                        今日
+                      </Button>
+                    </div>
+                  </div>
+                  {loadingEvents ? (
+                    <div className="text-center py-8 text-slate-500">
+                      カレンダーイベントを読み込み中...
+                    </div>
+                  ) : calendarView === 'monthly' ? (
+                    <MonthlyCalendar events={calendarEvents} selectedDate={selectedDate} userId={user?.id ?? null} />
+                  ) : calendarView === 'weekly' ? (
+                    <WeeklyTimeSchedule events={calendarEvents} selectedDate={selectedDate} userId={user?.id ?? null} />
+                  ) : (
+                    <div className="space-y-0">
+                      {calendarEvents.length === 0 ? (
+                        <div className="text-center py-8 text-slate-500">
+                          イベントが見つかりません
+                        </div>
+                      ) : (
+                        calendarEvents.map((event) => (
+                          <CalendarEventItem key={event.id} event={event} userId={user?.id ?? null} />
+                        ))
+                      )}
+                    </div>
+                  )}
+                  {!user && (
+                    <p className="mt-4 text-xs text-slate-400 text-center">
+                      ログインするとチェックマークとメモ機能が使えます
+                    </p>
+                  )}
+                </div>
               </div>
               <p className="mt-4 text-sm text-slate-500">
                 このカレンダーはリアルタイムで更新されます。定期的にチェックしてください。
@@ -320,96 +396,6 @@ export default function Home() {
                   <ScheduleItem day="土" time="午前9:45" channelName="白黒つけない会議" userId={user?.id ?? null} />
                   <ScheduleItem day="土" time="午後8時" channelName="ゆる哲学ラジオ" userId={user?.id ?? null} />
                 </div>
-                {!user && (
-                  <p className="mt-4 text-xs text-slate-400 text-center">
-                    ログインするとチェックマークとメモ機能が使えます
-                  </p>
-                )}
-              </Card>
-            </div>
-
-            {/* Calendar Events Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-slate-900">カレンダーイベント</h3>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1 border border-slate-200 rounded-lg p-1">
-                    <Button
-                      onClick={() => setCalendarView('monthly')}
-                      variant={calendarView === 'monthly' ? 'default' : 'ghost'}
-                      size="sm"
-                      className={`text-xs ${calendarView === 'monthly' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
-                    >
-                      月
-                    </Button>
-                    <Button
-                      onClick={() => setCalendarView('weekly')}
-                      variant={calendarView === 'weekly' ? 'default' : 'ghost'}
-                      size="sm"
-                      className={`text-xs ${calendarView === 'weekly' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
-                    >
-                      週
-                    </Button>
-                    <Button
-                      onClick={() => setCalendarView('list')}
-                      variant={calendarView === 'list' ? 'default' : 'ghost'}
-                      size="sm"
-                      className={`text-xs ${calendarView === 'list' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
-                    >
-                      リスト
-                    </Button>
-                  </div>
-                  <Button
-                    onClick={handlePreviousMonth}
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <span className="text-sm font-medium text-slate-700 min-w-[100px] text-center">
-                    {formatMonth(selectedDate)}
-                  </span>
-                  <Button
-                    onClick={handleNextMonth}
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    onClick={handleToday}
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs"
-                  >
-                    今日
-                  </Button>
-                </div>
-              </div>
-              <Card className="border-slate-200 p-6 rounded-xl">
-                {loadingEvents ? (
-                  <div className="text-center py-8 text-slate-500">
-                    カレンダーイベントを読み込み中...
-                  </div>
-                ) : calendarView === 'monthly' ? (
-                  <MonthlyCalendar events={calendarEvents} selectedDate={selectedDate} userId={user?.id ?? null} />
-                ) : calendarView === 'weekly' ? (
-                  <WeeklyTimeSchedule events={calendarEvents} selectedDate={selectedDate} userId={user?.id ?? null} />
-                ) : (
-                  <div className="space-y-0">
-                    {calendarEvents.length === 0 ? (
-                      <div className="text-center py-8 text-slate-500">
-                        イベントが見つかりません
-                      </div>
-                    ) : (
-                      calendarEvents.map((event) => (
-                        <CalendarEventItem key={event.id} event={event} userId={user?.id ?? null} />
-                      ))
-                    )}
-                  </div>
-                )}
                 {!user && (
                   <p className="mt-4 text-xs text-slate-400 text-center">
                     ログインするとチェックマークとメモ機能が使えます
