@@ -77,7 +77,10 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
           .eq('user_id', userId)
           .eq('event_id', event.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error("Delete error:", error);
+          throw error;
+        }
         setChecked(false);
         toast.success("チェックを外しました");
       } else {
@@ -88,13 +91,16 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
             event_id: event.id
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Insert error:", error);
+          throw error;
+        }
         setChecked(true);
         toast.success("チェックしました");
       }
     } catch (error) {
-      toast.error("エラーが発生しました");
-      console.error(error);
+      console.error("Checkmark error:", error);
+      toast.error(`エラーが発生しました: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }

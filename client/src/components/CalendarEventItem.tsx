@@ -49,18 +49,19 @@ export function CalendarEventItem({ event, userId }: CalendarItemProps) {
     setLoading(true);
     try {
       if (checked) {
-        // Remove check
         const { error } = await supabase
           .from('calendar_event_checks')
           .delete()
           .eq('user_id', userId)
           .eq('event_id', event.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error("Delete error:", error);
+          throw error;
+        }
         setChecked(false);
         toast.success("チェックを外しました");
       } else {
-        // Add check
         const { error } = await supabase
           .from('calendar_event_checks')
           .insert({
@@ -68,13 +69,16 @@ export function CalendarEventItem({ event, userId }: CalendarItemProps) {
             event_id: event.id
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Insert error:", error);
+          throw error;
+        }
         setChecked(true);
         toast.success("チェックしました");
       }
     } catch (error) {
-      toast.error("エラーが発生しました");
-      console.error(error);
+      console.error("Checkmark error:", error);
+      toast.error(`エラーが発生しました: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
