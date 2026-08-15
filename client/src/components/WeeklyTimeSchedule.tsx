@@ -13,14 +13,14 @@ export function WeeklyTimeSchedule({ events, selectedDate, userId }: WeeklyTimeS
   startDate.setDate(startDate.getDate() - startDate.getDay());
 
   const days: Date[] = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 7; i++) {
     const date = new Date(startDate);
     date.setDate(date.getDate() + i);
     days.push(date);
   }
 
   const hours = [];
-  for (let i = 0; i < 24; i++) {
+  for (let i = 6; i < 24; i++) {
     hours.push(i);
   }
 

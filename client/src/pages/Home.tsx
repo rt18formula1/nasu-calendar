@@ -346,38 +346,7 @@ export default function Home() {
 
             {/* Schedule List */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-slate-900">週次スケジュール</h3>
-                <div className="flex items-center gap-2">
-                  <Button
-                    onClick={handlePreviousMonth}
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <span className="text-sm font-medium text-slate-700 min-w-[100px] text-center">
-                    {formatMonth(selectedDate)}
-                  </span>
-                  <Button
-                    onClick={handleNextMonth}
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    onClick={handleToday}
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs"
-                  >
-                    今日
-                  </Button>
-                </div>
-              </div>
+              <h3 className="text-lg font-semibold text-slate-900">週次スケジュール</h3>
               <Card className="border-slate-200 p-6 rounded-xl">
                 <div className="space-y-0">
                   <ScheduleItem day="日" time="午前9:45" channelName="ゆるコンピュータ科学ラジオ" userId={user?.id ?? null} />
