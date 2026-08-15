@@ -86,9 +86,11 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
       } else {
         const { error } = await supabase
           .from('calendar_event_checks')
-          .insert({
+          .upsert({
             user_id: userId,
             event_id: event.id
+          }, {
+            onConflict: 'user_id,event_id'
           });
 
         if (error) {

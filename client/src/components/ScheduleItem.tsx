@@ -96,11 +96,13 @@ export function ScheduleItem({ day, time, channelName, userId }: ScheduleItemPro
         // Add check
         const { error } = await supabase
           .from('schedule_checks')
-          .insert({
+          .upsert({
             user_id: userId,
             day_of_week: day,
             time,
             channel_name: channelName
+          }, {
+            onConflict: 'user_id,day_of_week,time,channel_name'
           });
 
         if (error) throw error;
