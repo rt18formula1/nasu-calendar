@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { AuthButton } from "@/components/AuthButton";
 import { ScheduleItem } from "@/components/ScheduleItem";
 import { CalendarEventItem } from "@/components/CalendarEventItem";
-import { Calendar, Copy, ExternalLink, Menu, Share2, X } from "lucide-react";
+import { Calendar, Copy, ExternalLink, Menu, Share2, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
@@ -32,6 +32,7 @@ export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     // Get initial session
@@ -51,11 +52,11 @@ export default function Home() {
 
   useEffect(() => {
     loadCalendarEvents();
-  }, []);
+  }, [selectedDate]);
 
   const loadCalendarEvents = async () => {
     try {
-      const events = await getCalendarEvents();
+      const events = await getCalendarEvents(selectedDate);
       setCalendarEvents(events);
     } catch (error) {
       console.error("Failed to load calendar events:", error);
@@ -63,6 +64,22 @@ export default function Home() {
     } finally {
       setLoadingEvents(false);
     }
+  };
+
+  const handlePreviousMonth = () => {
+    setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1));
+  };
+
+  const handleToday = () => {
+    setSelectedDate(new Date());
+  };
+
+  const formatMonth = (date: Date) => {
+    return `${date.getFullYear()}年${date.getMonth() + 1}月`;
   };
 
   const handleCopyCalendarId = () => {
@@ -220,7 +237,38 @@ export default function Home() {
 
             {/* Schedule List */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-slate-900">週次スケジュール</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-slate-900">週次スケジュール</h3>
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handlePreviousMonth}
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm font-medium text-slate-700 min-w-[100px] text-center">
+                    {formatMonth(selectedDate)}
+                  </span>
+                  <Button
+                    onClick={handleNextMonth}
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    onClick={handleToday}
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    今日
+                  </Button>
+                </div>
+              </div>
               <Card className="border-slate-200 p-6 rounded-xl">
                 <div className="space-y-0">
                   <ScheduleItem day="日" time="午前9:45" channelName="ゆるコンピュータ科学ラジオ" userId={user?.id ?? null} />
@@ -249,7 +297,38 @@ export default function Home() {
 
             {/* Calendar Events Section */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-slate-900">カレンダーイベント</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-slate-900">カレンダーイベント</h3>
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handlePreviousMonth}
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm font-medium text-slate-700 min-w-[100px] text-center">
+                    {formatMonth(selectedDate)}
+                  </span>
+                  <Button
+                    onClick={handleNextMonth}
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    onClick={handleToday}
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    今日
+                  </Button>
+                </div>
+              </div>
               <Card className="border-slate-200 p-6 rounded-xl">
                 {loadingEvents ? (
                   <div className="text-center py-8 text-slate-500">

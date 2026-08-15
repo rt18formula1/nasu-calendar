@@ -14,14 +14,14 @@ export interface CalendarEvent {
   };
 }
 
-export async function getCalendarEvents(): Promise<CalendarEvent[]> {
+export async function getCalendarEvents(selectedDate?: Date): Promise<CalendarEvent[]> {
   if (!API_KEY) {
     throw new Error("Google Calendar API key is missing");
   }
 
-  const now = new Date();
-  const timeMin = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-  const timeMax = new Date(now.getFullYear(), now.getMonth() + 2, 0).toISOString();
+  const date = selectedDate || new Date();
+  const timeMin = new Date(date.getFullYear(), date.getMonth(), 1).toISOString();
+  const timeMax = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString();
 
   const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`;
 
