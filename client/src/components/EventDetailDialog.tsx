@@ -23,6 +23,7 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
   const [note, setNote] = useState("");
   const [existingNote, setExistingNote] = useState<CalendarEventNote | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (event && userId) {
@@ -47,6 +48,7 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
       }
     } catch (error) {
       console.error("Error loading check status:", error);
+      setError(true);
       // Don't throw error, just continue without check status
     }
   };
@@ -68,6 +70,7 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
       }
     } catch (error) {
       console.error("Error loading note:", error);
+      setError(true);
       // Don't throw error, just continue without note
     }
   };
@@ -201,7 +204,7 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
             {userId && (
               <Button
                 onClick={handleCheck}
-                disabled={loading}
+                disabled={loading || error}
                 variant="outline"
                 size="sm"
                 className={`h-10 w-10 p-0 rounded-full border-2 ${

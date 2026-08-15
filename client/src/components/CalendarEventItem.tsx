@@ -18,6 +18,7 @@ interface CalendarCheck {
 export function CalendarEventItem({ event, userId }: CalendarItemProps) {
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -41,6 +42,7 @@ export function CalendarEventItem({ event, userId }: CalendarItemProps) {
       }
     } catch (error) {
       console.error("Error loading check status:", error);
+      setError(true);
       // Don't throw error, just continue without check status
     }
   };
@@ -93,12 +95,13 @@ export function CalendarEventItem({ event, userId }: CalendarItemProps) {
 
   const formattedDate = formatEventDate(event);
 
+  // Always render the component regardless of errors
   return (
     <div className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
       <div className="flex items-center gap-3 flex-1">
         <Button
           onClick={handleCheck}
-          disabled={loading || !userId}
+          disabled={loading || !userId || error}
           variant="outline"
           size="sm"
           className={`h-8 w-8 p-0 rounded-full border-2 ${
