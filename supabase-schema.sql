@@ -1,3 +1,23 @@
+-- Drop existing policies and tables
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can view own schedule checks" ON schedule_checks;
+DROP POLICY IF EXISTS "Users can insert own schedule checks" ON schedule_checks;
+DROP POLICY IF EXISTS "Users can update own schedule checks" ON schedule_checks;
+DROP POLICY IF EXISTS "Users can delete own schedule checks" ON schedule_checks;
+DROP POLICY IF EXISTS "Users can view own schedule notes" ON schedule_notes;
+DROP POLICY IF EXISTS "Users can insert own schedule notes" ON schedule_notes;
+DROP POLICY IF EXISTS "Users can update own schedule notes" ON schedule_notes;
+DROP POLICY IF EXISTS "Users can delete own schedule notes" ON schedule_notes;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP FUNCTION IF EXISTS handle_new_user();
+
+DROP TABLE IF EXISTS schedule_notes CASCADE;
+DROP TABLE IF EXISTS schedule_checks CASCADE;
+DROP TABLE IF EXISTS profiles CASCADE;
+
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
