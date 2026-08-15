@@ -1,23 +1,41 @@
--- Drop existing policies and tables
-DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
-DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
-DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
-DROP POLICY IF EXISTS "Users can view own schedule checks" ON schedule_checks;
-DROP POLICY IF EXISTS "Users can insert own schedule checks" ON schedule_checks;
-DROP POLICY IF EXISTS "Users can update own schedule checks" ON schedule_checks;
-DROP POLICY IF EXISTS "Users can delete own schedule checks" ON schedule_checks;
-DROP POLICY IF EXISTS "Users can view own schedule notes" ON schedule_notes;
-DROP POLICY IF EXISTS "Users can insert own schedule notes" ON schedule_notes;
-DROP POLICY IF EXISTS "Users can update own schedule notes" ON schedule_notes;
-DROP POLICY IF EXISTS "Users can delete own schedule notes" ON schedule_notes;
-DROP POLICY IF EXISTS "Users can view own calendar event checks" ON calendar_event_checks;
-DROP POLICY IF EXISTS "Users can insert own calendar event checks" ON calendar_event_checks;
-DROP POLICY IF EXISTS "Users can update own calendar event checks" ON calendar_event_checks;
-DROP POLICY IF EXISTS "Users can delete own calendar event checks" ON calendar_event_checks;
-DROP POLICY IF EXISTS "Users can view own calendar event notes" ON calendar_event_notes;
-DROP POLICY IF EXISTS "Users can insert own calendar event notes" ON calendar_event_notes;
-DROP POLICY IF EXISTS "Users can update own calendar event notes" ON calendar_event_notes;
-DROP POLICY IF EXISTS "Users can delete own calendar event notes" ON calendar_event_notes;
+-- Drop existing policies and tables (only if they exist)
+DO $$ 
+BEGIN
+  -- Drop policies for existing tables
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'profiles') THEN
+    DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+    DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+    DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
+  END IF;
+
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'schedule_checks') THEN
+    DROP POLICY IF EXISTS "Users can view own schedule checks" ON schedule_checks;
+    DROP POLICY IF EXISTS "Users can insert own schedule checks" ON schedule_checks;
+    DROP POLICY IF EXISTS "Users can update own schedule checks" ON schedule_checks;
+    DROP POLICY IF EXISTS "Users can delete own schedule checks" ON schedule_checks;
+  END IF;
+
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'schedule_notes') THEN
+    DROP POLICY IF EXISTS "Users can view own schedule notes" ON schedule_notes;
+    DROP POLICY IF EXISTS "Users can insert own schedule notes" ON schedule_notes;
+    DROP POLICY IF EXISTS "Users can update own schedule notes" ON schedule_notes;
+    DROP POLICY IF EXISTS "Users can delete own schedule notes" ON schedule_notes;
+  END IF;
+
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'calendar_event_checks') THEN
+    DROP POLICY IF EXISTS "Users can view own calendar event checks" ON calendar_event_checks;
+    DROP POLICY IF EXISTS "Users can insert own calendar event checks" ON calendar_event_checks;
+    DROP POLICY IF EXISTS "Users can update own calendar event checks" ON calendar_event_checks;
+    DROP POLICY IF EXISTS "Users can delete own calendar event checks" ON calendar_event_checks;
+  END IF;
+
+  IF EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'calendar_event_notes') THEN
+    DROP POLICY IF EXISTS "Users can view own calendar event notes" ON calendar_event_notes;
+    DROP POLICY IF EXISTS "Users can insert own calendar event notes" ON calendar_event_notes;
+    DROP POLICY IF EXISTS "Users can update own calendar event notes" ON calendar_event_notes;
+    DROP POLICY IF EXISTS "Users can delete own calendar event notes" ON calendar_event_notes;
+  END IF;
+END $$;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 DROP FUNCTION IF EXISTS handle_new_user();
