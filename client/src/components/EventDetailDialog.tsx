@@ -34,31 +34,41 @@ export function EventDetailDialog({ event, open, onClose, userId }: EventDetailD
   const loadCheckStatus = async () => {
     if (!userId || !event) return;
 
-    const { data, error } = await supabase
-      .from('calendar_event_checks')
-      .select('id, checked_at')
-      .eq('user_id', userId)
-      .eq('event_id', event.id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('calendar_event_checks')
+        .select('id, checked_at')
+        .eq('user_id', userId)
+        .eq('event_id', event.id)
+        .single();
 
-    if (data && !error) {
-      setChecked(true);
+      if (data && !error) {
+        setChecked(true);
+      }
+    } catch (error) {
+      console.error("Error loading check status:", error);
+      // Don't throw error, just continue without check status
     }
   };
 
   const loadNote = async () => {
     if (!userId || !event) return;
 
-    const { data, error } = await supabase
-      .from('calendar_event_notes')
-      .select('id, note')
-      .eq('user_id', userId)
-      .eq('event_id', event.id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('calendar_event_notes')
+        .select('id, note')
+        .eq('user_id', userId)
+        .eq('event_id', event.id)
+        .single();
 
-    if (data && !error) {
-      setExistingNote(data);
-      setNote(data.note);
+      if (data && !error) {
+        setExistingNote(data);
+        setNote(data.note);
+      }
+    } catch (error) {
+      console.error("Error loading note:", error);
+      // Don't throw error, just continue without note
     }
   };
 

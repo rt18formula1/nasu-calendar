@@ -28,15 +28,20 @@ export function CalendarEventItem({ event, userId }: CalendarItemProps) {
   const loadCheckStatus = async () => {
     if (!userId) return;
 
-    const { data, error } = await supabase
-      .from('calendar_event_checks')
-      .select('id, checked_at')
-      .eq('user_id', userId)
-      .eq('event_id', event.id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('calendar_event_checks')
+        .select('id, checked_at')
+        .eq('user_id', userId)
+        .eq('event_id', event.id)
+        .single();
 
-    if (data && !error) {
-      setChecked(true);
+      if (data && !error) {
+        setChecked(true);
+      }
+    } catch (error) {
+      console.error("Error loading check status:", error);
+      // Don't throw error, just continue without check status
     }
   };
 
