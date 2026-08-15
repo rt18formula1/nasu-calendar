@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { AuthButton } from "@/components/AuthButton";
 import { ScheduleItem } from "@/components/ScheduleItem";
 import { CalendarEventItem } from "@/components/CalendarEventItem";
+import { MonthlyCalendar } from "@/components/MonthlyCalendar";
+import { WeeklyTimeSchedule } from "@/components/WeeklyTimeSchedule";
 import { Calendar, Copy, ExternalLink, Menu, Share2, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -33,6 +35,7 @@ export default function Home() {
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calendarView, setCalendarView] = useState<'monthly' | 'weekly' | 'list'>('monthly');
 
   useEffect(() => {
     // Get initial session
@@ -52,11 +55,29 @@ export default function Home() {
 
   useEffect(() => {
     loadCalendarEvents();
-  }, [selectedDate]);
+  }, [selectedDate, calendarView]);
 
   const loadCalendarEvents = async () => {
     try {
-      const events = await getCalendarEvents(selectedDate);
+      let startDate: Date;
+      let endDate: Date;
+
+      if (calendarView === 'monthly') {
+        startDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+        endDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+      } else if (calendarView === 'weekly') {
+        const startOfWeek = new Date(selectedDate);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+        startDate = startOfWeek;
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(endOfWeek.getDate() + 6);
+        endDate = endOfWeek;
+      } else {
+        startDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+        endDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+      }
+
+      const events = await getCalendarEvents(startDate, endDate);
       setCalendarEvents(events);
     } catch (error) {
       console.error("Failed to load calendar events:", error);
@@ -67,11 +88,23 @@ export default function Home() {
   };
 
   const handlePreviousMonth = () => {
-    setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1));
+    if (calendarView === 'monthly') {
+      setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1));
+    } else if (calendarView === 'weekly') {
+      setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 7));
+    } else {
+      setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1));
+    }
   };
 
   const handleNextMonth = () => {
-    setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1));
+    if (calendarView === 'monthly') {
+      setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1));
+    } else if (calendarView === 'weekly') {
+      setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 7));
+    } else {
+      setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1));
+    }
   };
 
   const handleToday = () => {
@@ -300,6 +333,32 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-slate-900">カレンダーイベント</h3>
                 <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 border border-slate-200 rounded-lg p-1">
+                    <Button
+                      onClick={() => setCalendarView('monthly')}
+                      variant={calendarView === 'monthly' ? 'default' : 'ghost'}
+                      size="sm"
+                      className={`text-xs ${calendarView === 'monthly' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
+                    >
+                      月
+                    </Button>
+                    <Button
+                      onClick={() => setCalendarView('weekly')}
+                      variant={calendarView === 'weekly' ? 'default' : 'ghost'}
+                      size="sm"
+                      className={`text-xs ${calendarView === 'weekly' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
+                    >
+                      週
+                    </Button>
+                    <Button
+                      onClick={() => setCalendarView('list')}
+                      variant={calendarView === 'list' ? 'default' : 'ghost'}
+                      size="sm"
+                      className={`text-xs ${calendarView === 'list' ? 'bg-[#5B4B8A] text-white' : 'text-slate-600'}`}
+                    >
+                      リスト
+                    </Button>
+                  </div>
                   <Button
                     onClick={handlePreviousMonth}
                     variant="outline"
@@ -334,15 +393,21 @@ export default function Home() {
                   <div className="text-center py-8 text-slate-500">
                     カレンダーイベントを読み込み中...
                   </div>
-                ) : calendarEvents.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    イベントが見つかりません
-                  </div>
+                ) : calendarView === 'monthly' ? (
+                  <MonthlyCalendar events={calendarEvents} selectedDate={selectedDate} userId={user?.id ?? null} />
+                ) : calendarView === 'weekly' ? (
+                  <WeeklyTimeSchedule events={calendarEvents} selectedDate={selectedDate} userId={user?.id ?? null} />
                 ) : (
                   <div className="space-y-0">
-                    {calendarEvents.map((event) => (
-                      <CalendarEventItem key={event.id} event={event} userId={user?.id ?? null} />
-                    ))}
+                    {calendarEvents.length === 0 ? (
+                      <div className="text-center py-8 text-slate-500">
+                        イベントが見つかりません
+                      </div>
+                    ) : (
+                      calendarEvents.map((event) => (
+                        <CalendarEventItem key={event.id} event={event} userId={user?.id ?? null} />
+                      ))
+                    )}
                   </div>
                 )}
                 {!user && (
